@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+import os
+import sys
+import yaml
+
+# ./tester (test/val) model_name (none/carmagnola)
+
+
+# DATASET ############################################################################################################################################
+SAVED_MODEL_NAME = sys.argv[2] #"yolov5n_scratch_100_gauges_object_detection-2"
+DATASET_NAME = SAVED_MODEL_NAME.split("_", 3)[3] #"gauges_object_detection-2"
+
+DATASET_LOC = "/home/gulce/Workspaces/yolov5_ws/datasets/" + DATASET_NAME + "/data.yaml"
+WEIGHTS_DIR = "/home/gulce/Workspaces/yolov5_ws/yolov5/saved_models/" + SAVED_MODEL_NAME + "/yolov5_results/weights/best.pt"
+OPT_LOC = "/home/gulce/Workspaces/yolov5_ws/yolov5/saved_models/" + SAVED_MODEL_NAME + "/yolov5_results/opt.yaml"
+
+######################################################################################################################################################
+
+# TESTING PARAMS #####################################################################################################################################
+#IMG_SIZE = 1280
+with open(OPT_LOC, 'r') as stream:
+        IMG_SIZE = str(yaml.safe_load(stream)['imgsz'])
+CONF = 0.5
+######################################################################################################################################################
+
+if sys.argv[1] == 'test':
+        if len(sys.argv) == 3:
+            TEST_DIR = "/home/gulce/Workspaces/yolov5_ws/datasets/" + DATASET_NAME + "/test/images"
+        elif sys.argv[3] == 'carmagnola':
+            TEST_DIR = "/home/gulce/Datasets/separated"
+        test_st = 'python detect.py --img ' + str(IMG_SIZE) + ' --weights ' + WEIGHTS_DIR + ' --conf ' + str(CONF) + ' --source ' + TEST_DIR
+        os.system(test_st)
+
+elif sys.argv[1]  == 'val':
+        with open(OPT_LOC, 'r') as stream:
+                VAL_IMG_SIZE = str(yaml.safe_load(stream)['imgsz'])
+                VAL_BATCH_SIZE = 16 #str(yaml.safe_load(stream)['batch_size'])
+        val_st = 'python val.py --data ' + DATASET_LOC + ' --weights ' + WEIGHTS_DIR + ' --img ' + str(VAL_IMG_SIZE) + ' --batch-size ' + str(VAL_BATCH_SIZE)
+        print("Results of best model on validation set:")
+        os.system(val_st)

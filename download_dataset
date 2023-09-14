@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+from roboflow import Roboflow
+
+rf = Roboflow(api_key="KL9n8RghMamHnRvl7ANI")
+project = rf.workspace("gauges-e7hmd").project("gauges_object_detection")
+dataset = project.version(2).download("yolov5")
+model = project.version(1).model

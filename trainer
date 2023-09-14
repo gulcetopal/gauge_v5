@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+import os
+import yaml
+
+# MODEL PARAMS #######################################################################################################################################
+DATASET_NAME = "gauges_object_detection-2"
+MODEL = "yolov5m"
+######################################################################################################################################################
+
+# TRAINING PARAMS ####################################################################################################################################
+WEIGHT_MODE = "pre-trained"
+EPOCHS = 1000
+IMG_SIZE = 512
+BATCH = 16
+PATIENCE = 10
+######################################################################################################################################################
+
+VERSION = "v6.0"
+MODEL_CONF = "/home/gulce/Workspaces/yolov5_ws/yolov5/models/" + MODEL + ".yaml"
+DATASET_LOC = "/home/gulce/Workspaces/yolov5_ws/datasets/" + DATASET_NAME + "/data.yaml"
+CONFIG_LOC = "/home/gulce/Workspaces/yolov5_ws/yolov5/models/custom_model_" + MODEL + ".yaml"
+INFO_FILE = "/home/gulce/Workspaces/yolov5_ws/yolov5/exported_files/info.txt"
+
+if WEIGHT_MODE == "pre-trained":
+    WEIGHTS = "/home/gulce/Workspaces/yolov5_ws/yolov5/" + MODEL + '.pt'
+elif WEIGHT_MODE == "scratch":
+    WEIGHTS = "\'\'"
+
+# info_file.txt #######################################################################################################################################
+for info_file in range(1):
+    open(INFO_FILE, "w").close()
+
+    file = open(INFO_FILE, "w")
+    file.write("VERSION: " + VERSION + "\n")
+    file.write("MODEL: " + MODEL + "\n")
+    file.write("Base model CONFIG FILE: " + MODEL_CONF + "\n" + "\n")
+
+    file.write("DATASET: " + DATASET_NAME + "\n")
+    file.write("WEIGHTS: " + WEIGHT_MODE + "\n")
+    file.write("EPOCHS: " + str(EPOCHS) + "\n")
+    file.write("IMAGE SIZE: " + str(IMG_SIZE) + "\n" + "\n")
+
+    file.write("BATCH SIZE: " + str(BATCH) + "\n")
+    file.write("PATIENCE: " + str(PATIENCE) + "\n")
+    file.close()
+#######################################################################################################################################################
+
+# custom_model.yaml ###################################################################################################################################
+for custom_model in range(1):
+    with open(DATASET_LOC, 'r') as stream:
+        num_classes = str(yaml.safe_load(stream)['nc'])
+
+    with open(CONFIG_LOC , 'r') as f:
+        file_source = f.read()
+        new_string = 'nc: '+str(num_classes)+' #'
+        replace_string = file_source.replace('nc:', new_string)
+
+    with open(CONFIG_LOC , 'w') as f:
+        f.write(replace_string)
+#######################################################################################################################################################
+    
+
+train_st = 'python train.py --img ' + str(IMG_SIZE) + ' --batch ' + str(BATCH) + ' --epochs ' + str(EPOCHS) +' --patience ' + str(PATIENCE) +' --data ' + DATASET_LOC + ' --cfg ' + CONFIG_LOC +' --weights ' + WEIGHTS + ' --name  yolov5_results  --cache'
+os.system(train_st)
+
+SAVED_MODEL_NAME = MODEL + '_' + WEIGHT_MODE + '_' + str(EPOCHS) + '_' + DATASET_NAME
+SAVED_MODEL_DIR = '/home/gulce/Workspaces/yolov5_ws/yolov5/saved_models/' + SAVED_MODEL_NAME
+os.system("mkdir " + SAVED_MODEL_DIR)
+
+save_model_st = 'cp -r /home/gulce/Workspaces/yolov5_ws/yolov5/runs/train/* ' + SAVED_MODEL_DIR
+os.system(save_model_st)
+info_model_st = 'cp /home/gulce/Workspaces/yolov5_ws/yolov5/exported_files/info.txt ' + SAVED_MODEL_DIR
+os.system(info_model_st)
+
+os.system("rm -r /home/gulce/Workspaces/yolov5_ws/yolov5/runs/train/yolov5_results")
+print("Model saved with name \'" + SAVED_MODEL_NAME + "\'.")

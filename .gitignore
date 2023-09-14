@@ -1,0 +1,64 @@
+# Repo-specific DockerIgnore -------------------------------------------------------------------------------------------
+.cache
+.idea
+runs
+output
+coco
+storage.googleapis.com
+
+data/samples/*
+**/results*.csv
+*.jpg
+
+# Neural Network weights -----------------------------------------------------------------------------------------------
+#**/*.pt
+**/*.pth
+**/*.onnx
+**/*.mlmodel
+**/*.torchscript
+**/*.torchscript.pt
+**/*.tflite
+**/*.h5
+**/*.pb
+#*_saved_model/
+*_web_model/
+
+# Below Copied From .gitignore -----------------------------------------------------------------------------------------
+# Below Copied From .gitignore -----------------------------------------------------------------------------------------
+
+
+# GitHub Python GitIgnore ----------------------------------------------------------------------------------------------
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+wandb/
+.installed.cfg
+*.egg
+
+# virtualenv
+.venv*
+venv*/
+ENV*/
+
+
