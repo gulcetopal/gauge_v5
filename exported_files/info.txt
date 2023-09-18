@@ -1,10 +1,10 @@
 VERSION: v6.0
-MODEL: yolov5m
-Base model CONFIG FILE: /home/gulce/Workspaces/yolov5_ws/yolov5/models/yolov5m.yaml
+MODEL: yolov5s
+Base model CONFIG FILE: /home/gulce/Workspaces/yolov5_ws/yolov5/models/yolov5s.yaml
 
 DATASET: gauges_object_detection-2
-WEIGHTS: pre-trained
-EPOCHS: 1000
+WEIGHTS: scratch
+EPOCHS: 20
 IMAGE SIZE: 512
 
 BATCH SIZE: 16

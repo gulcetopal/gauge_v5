@@ -14,7 +14,8 @@ Consists of main YOLOv5 repo and additional material.
 - All required original YOLO model weights and yaml files are downloaded and included in repo.
 
 ### V1.1
- 
+ - Updated tester file to both test and evaluate test dataset.
+ - Updated model naming, no more includes training dataset name.
 
 
 

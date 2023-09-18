@@ -3,35 +3,31 @@ import os
 import sys
 import yaml
 
-# ./tester (test/val) model_name (none/carmagnola)
+# ./tester (test/eval) model_name dataset_name
 
 
 # DATASET ############################################################################################################################################
 SAVED_MODEL_NAME = sys.argv[2] #"yolov5n_scratch_100_gauges_object_detection-2"
-DATASET_NAME = SAVED_MODEL_NAME.split("_", 3)[3] #"gauges_object_detection-2"
-
+DATASET_NAME = sys.argv[3] #SAVED_MODEL_NAME.split("_", 3)[3] #"gauges_object_detection-2"
 DATASET_LOC = "/home/gulce/Workspaces/yolov5_ws/datasets/" + DATASET_NAME + "/data.yaml"
+
+TEST_DIR = "/home/gulce/Workspaces/yolov5_ws/datasets/" + DATASET_NAME + "/test/images"
 WEIGHTS_DIR = "/home/gulce/Workspaces/yolov5_ws/yolov5/saved_models/" + SAVED_MODEL_NAME + "/yolov5_results/weights/best.pt"
 OPT_LOC = "/home/gulce/Workspaces/yolov5_ws/yolov5/saved_models/" + SAVED_MODEL_NAME + "/yolov5_results/opt.yaml"
 
 ######################################################################################################################################################
 
 # TESTING PARAMS #####################################################################################################################################
-#IMG_SIZE = 1280
-with open(OPT_LOC, 'r') as stream:
-        IMG_SIZE = str(yaml.safe_load(stream)['imgsz'])
-CONF = 0.5
+IMG_SIZE = 512
+#with open(OPT_LOC, 'r') as stream:
+#        IMG_SIZE = str(yaml.safe_load(stream)['imgsz'])
+CONF = 0.7
 ######################################################################################################################################################
 
 if sys.argv[1] == 'test':
-        if len(sys.argv) == 3:
-            TEST_DIR = "/home/gulce/Workspaces/yolov5_ws/datasets/" + DATASET_NAME + "/test/images"
-        elif sys.argv[3] == 'carmagnola':
-            TEST_DIR = "/home/gulce/Datasets/separated"
         test_st = 'python detect.py --img ' + str(IMG_SIZE) + ' --weights ' + WEIGHTS_DIR + ' --conf ' + str(CONF) + ' --source ' + TEST_DIR
         os.system(test_st)
-
-elif sys.argv[1]  == 'val':
+elif sys.argv[1]  == 'eval':
         with open(OPT_LOC, 'r') as stream:
                 VAL_IMG_SIZE = str(yaml.safe_load(stream)['imgsz'])
                 VAL_BATCH_SIZE = 16 #str(yaml.safe_load(stream)['batch_size'])

@@ -4,12 +4,12 @@ import yaml
 
 # MODEL PARAMS #######################################################################################################################################
 DATASET_NAME = "gauges_object_detection-2"
-MODEL = "yolov5m"
+MODEL = "yolov5s"
 ######################################################################################################################################################
 
 # TRAINING PARAMS ####################################################################################################################################
-WEIGHT_MODE = "pre-trained"
-EPOCHS = 1000
+WEIGHT_MODE = "scratch"
+EPOCHS = 20
 IMG_SIZE = 512
 BATCH = 16
 PATIENCE = 10
@@ -63,7 +63,7 @@ for custom_model in range(1):
 train_st = 'python train.py --img ' + str(IMG_SIZE) + ' --batch ' + str(BATCH) + ' --epochs ' + str(EPOCHS) +' --patience ' + str(PATIENCE) +' --data ' + DATASET_LOC + ' --cfg ' + CONFIG_LOC +' --weights ' + WEIGHTS + ' --name  yolov5_results  --cache'
 os.system(train_st)
 
-SAVED_MODEL_NAME = MODEL + '_' + WEIGHT_MODE + '_' + str(EPOCHS) + '_' + DATASET_NAME
+SAVED_MODEL_NAME = MODEL + '_' + WEIGHT_MODE + '_' + str(EPOCHS)
 SAVED_MODEL_DIR = '/home/gulce/Workspaces/yolov5_ws/yolov5/saved_models/' + SAVED_MODEL_NAME
 os.system("mkdir " + SAVED_MODEL_DIR)
 
